@@ -97,6 +97,9 @@ default match settings:
     # all other settings, including the 'set choice bet bonus'.
     minimum bet bonus: 2
             
+    # Matches that exceed this time limit will be
+    # forced to end in a draw.  Specified in minutes.
+    match duration limit: 30
             
 ################################
 one move per Pokemon settings:
