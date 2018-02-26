@@ -5,7 +5,7 @@
 # 
 # This is a near-perfect reproduction of PBR 4.0's current 
 # automated matchmaking in terms of metagames, gimmicks, 
-# and match attributes. (fog behavior is an exception).
+# and match settings. (fog behavior is an exception).
 # 
 # Configuration Reference:
 # https://docs.google.com/document/d/13B3cE4udEvMAgjE4q0S_h_UsDOlXHTuUHtOS_B_y-Tk/edit?usp=sharing
@@ -18,8 +18,13 @@
 
 
 ################################
-default match attributes:
+default match settings:
 ################################
+    ################
+    # Metagames and gimmicks may specify 
+    # different values for these settings:
+    ################
+    
     # Delay in seconds before selecting a move.
     move delay: 4 
     
@@ -31,9 +36,16 @@ default match attributes:
     
     # Percent chance for switching to be on.
     switching: 50     
-  
     
-    # Metagames and gimmicks cannot specify different bet limits.
+    # Early betting bonus.
+    bet bonus: 30
+    
+    
+    ################
+    # Metagames and gimmicks may NOT specify 
+    # different values for these settings:
+    ################
+    
     bet limits:
         betting start:
             limit:     # Set an amount if desired.
@@ -46,9 +58,6 @@ default match attributes:
           - seconds: 20
             limit: 5000
   
-    # Early betting bonus.
-    bet bonus: 30
-    
     # Five points define four sections of linear decay.
     # The bet bonus at these points is 'bet bonus' * 'bonus multiplier'.
     # 
@@ -72,11 +81,26 @@ default match attributes:
         betting end:
             bonus multiplier: 0.0
 
+    # Increase bet bonus by some percentage when switching is on.
+    # Does not apply to token matches.
+    bet bonus switching boost: 0
+            
+    # If a token match bidder chooses sets, switching is forced 
+    # to be off (but still may be special for U-turn).
+    force switching off if set choice: false
+    
+    # This bet bonus activates whenever the player specifies their sets.
+    set choice bet bonus: 0
+    
+    # Applies to all matches.  This minimum overrides
+    # all other settings, including the 'set choice bet bonus'.
+    minimum bet bonus: 2
+            
             
 ################################
-one move per Pokemon attributes:
+one move per Pokemon settings:
 ################################
-    # Automatically set these attributes when switching is off 
+    # Settings that trigger when switching is off 
     # and there is one move per Pokemon.
     # (Ex: metronome, ohko, and metronome + ohko matches).
     move delay: 0
@@ -731,7 +755,6 @@ additional restictions:
     ################
     token matchmaking:
     ################
-        permanently disable switching: false
         gimmick blacklist:
             # Nuclear option that prevents a gimmick from ever being bid for by a token match.
           - Fog
