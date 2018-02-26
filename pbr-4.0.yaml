@@ -678,24 +678,25 @@ gimmicks:
             # This is only able to produce one combo:
             # Defiance + Random Order, the current combo for Stadium 2 metagames.
             gimmicks:
-                # These two gimmicks will be present.
+                # These two gimmicks will be present 
+                # in the combo, with rarity 1.0.
               - [Defiance, Random Order]: 1.0
             icon: combo
             description: Defiance and Random Order.
       
       - Combo:
             gimmicks:
-                # Any two gimmicks will be present.
+                # Any two gimmicks will be present, with rarity 0.1.
               - [any, any]: 0.1
-                # Any three gimmicks will be present.
+                # Any three gimmicks will be present, with rarity 0.1.
               - [any, any, any]: 0.1
-                # Any four gimmicks will be present.
+                # Any four gimmicks will be present, with rarity 0.05.
               - [any, any, any, any]: 0.05
-                # Any five gimmicks will be present.
+                # Any five gimmicks will be present, with rarity 0.03.
               - [any, any, any, any, any]: 0.03
               
               
-            # Example of disabling this metagame entirely.
+            # Example of disabling this gimmick entirely.
             disabled: true
             icon: combo
             description: # Leave blank for auto generated description.
