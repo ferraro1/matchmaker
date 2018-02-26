@@ -89,7 +89,8 @@ default match settings:
     # to be off (but still may be special for U-turn).
     force switching off if set choice: false
     
-    # This bet bonus activates whenever the player specifies their sets.
+    # The bet bonus for token matches in which the 
+    # match bidder specifies their sets.
     set choice bet bonus: 0
     
     # Applies to all matches.  This minimum overrides
