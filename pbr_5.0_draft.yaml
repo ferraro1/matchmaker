@@ -1,7 +1,7 @@
 ---
 ################################################################
 ################################################################
-# PBR Match Configuration testing
+# PBR 5.0 draft Match Configuration
 # 
 # Configuration Reference:
 # https://docs.google.com/document/d/13B3cE4udEvMAgjE4q0S_h_UsDOlXHTuUHtOS_B_y-Tk/edit?usp=sharing
@@ -32,21 +32,13 @@ matchmaker_settings:
     # 1 / 2048
     shiny_chance: 0.00048828125
     
-    # When true: If a token match bidder chooses sets, switching is forced 
-    # to be off (but still may be special for U-turn).
-    # When false: No effect.
-    force_switching_off_if_team_choice: true
-    
-    # Forced bet_bonus for token matches where the match bidder
-    # specifies the Pokemon species for the teams.
-    team_choice_bet_bonus: 2
-    
     # Chance that a gimmick gets picked.
-    default_gimmick_chance: .5
+    default_gimmick_chance: 0.5
     
     holiday_mode: false     # Holiday support to be added.
     
-
+    additional_mode_aliases:
+        "luckmons": "metronome ohko"
 
 ################################       
 splatoon_settings:
@@ -65,27 +57,31 @@ match_settings:
     ################
         # Metagames and gimmicks may specify 
         # different values for these settings.
-        
-        # Delay in seconds before selecting a move.
-        move_delay: 4 
-        
-        # Delay in seconds before selecting a switch.
-        switch_delay: 5
-        
-        # PBR emulation speed multipler.
-        emulation_speed_multiplier: 1
-        
-        # Percent chance for switching to be on.
-        switching: 50     
-        
-        # Early bet bonus.
-        bet_bonus: 30
-        
-        # Early bet bonus when switching is on.
-        switching_bet_bonus: 35
-        
-        # Bet ceiling. Modify to some integer value.
-        bet_ceiling: null
+        0:
+            # Delay in seconds before selecting a move.
+            move_delay: 4 
+            
+            # Delay in seconds before selecting a switch.
+            switch_delay: 5
+            
+            # PBR emulation speed multipler.
+            emulation_speed_multiplier: 1.0
+            
+            # Percent chance for switching to be on, between 0 and 1 inclusive.
+            switching: 0.5
+            
+            # Early bet bonus.
+            bet_bonus: 30
+            
+            # Early bet bonus when switching is on.
+            switching_bet_bonus: 35
+            
+            # Bet ceiling. Modify to some integer value.
+            bet_ceiling: null
+            
+            # Ex: all metronome matchups get flagged as "cancer", so this 
+            # needs to be disabled for some metagames.
+            cancer_check: yes
     
     ################
     fixed:
@@ -138,23 +134,35 @@ one_move_per_Pokemon_settings:
     # Settings that trigger when switching is off 
     # and there is one move per Pokemon.
     # (Ex: metronome, ohko, and metronome + ohko matches).
-    move_delay: 0
-    switch_delay: 0
-    emulation_speed_multiplier: 1.5
+    1:
+        move_delay: 0
+        switch_delay: 0
+        emulation_speed_multiplier: 1.5
 
+    
+################################
+team_choice_settings:
+################################
+    # Settings for token matches where the match bidder
+    # selects the Pokemon species for the teams.
+    7:
+        # switching may still be special for U-turn.
+        switching: 0.0
+        bet_bonus: 2
+        switching_bet_bonus: 2
+    
+    
     
 ################################
 metagames:
 ################################
     ################
-    single:
+    base:
     ################
-        # Metagame name for the overlay and token match bid commands.
         simple:
             # Rarities are not percentages.
-            # In metagame selection, metagames are chosen by accumulating 
-            # and then randomly bisecting their rarities.
-            rarity: 25.0
+            # Modes are selected by accumulating and then randomly bisecting their rarities.
+            rarity: 30.0
             
             # Internal set tag, set by movesets team.
             set_tag: standard
@@ -162,79 +170,77 @@ metagames:
             # Name displayed on the overlay.
             display_name: Simple
             
-            # Alternate names accepted in match bids.
-            bid_aliases: [simple, standard]
+            # Alternate names accepted in token match bids.
+            aliases: [simple, standard]
             
             # Description for the overlay.
-            description: A match using simple movesets.
+            icon_id: simple
+            description: A match using standard movesets.
             
         advanced:
             rarity: 12.5
             set_tag: advanced
             display_name: Advanced
-            bid_aliases: [advanced, advance]
+            aliases: [advanced, advance]
             description: A match using more complex movesets.
             
         ubers:
-            rarity: 5.0
+            rarity: 2.5
             set_tag: ubers
             display_name: Ubers
-            bid_aliases: [ubers, uber]
+            aliases: [ubers, uber]
             description: A match using the most powerful Pokémon with very strong sets.
             
         middle_cup:
-            disabled: yes
-            rarity: 5.0
+            rarity: 2.5
             set_tag: middle-cup
             display_name: Middle Cup
-            bid_aliases: [middlecup, mc, mcup]
+            aliases: [middlecup, mc, mcup]
             description: 
             
         little_cup:
-            disabled: yes
-            rarity: 5.0
+            rarity: 2.5
             set_tag: little-cup
             display_name: Little Cup
-            bid_aliases: [littlecup, lc, lcup]
+            aliases: [littlecup, lc, lcup]
             description: 
             
-        stadium_2:
-            rarity: 5.0
+        stadium2:
+            rarity: 2.5
             set_tag: setname+stadium-2
             display_name: Stadium 2
-            bid_aliases: [stadium2, stad2]
+            aliases: [stadium2, stad2]
             description: A match using Lv. 100 rental Pokémon from Stadium 2.
             
         runmons:
             rarity: 0.0
-            match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 10
             set_tag: runmon
             display_name: Runmons
-            bid_aliases: [runmons, runmon]
+            aliases: [runmons, runmon]
             description: 
             
         ashmons:
             disabled: yes
             rarity: 0.0
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 10
+                5:
+                    bet_bonus: 10
+                    switching_bet_bonus: 10
             set_tag: ashmon
             display_name: Ashmons
-            bid_aliases: [ashmons, ashmon]
+            aliases: [ashmons, ashmon]
             description: 
             
         starters:
             rarity: 0.0
             match_settings:
-                bet_bonus: 2
-                switching_bet_bonus: 2
+                5:
+                    bet_bonus: 2
+                    switching_bet_bonus: 2
             set_tag: starterbattle
             display_name: Starters
-            bid_aliases: [starters, starter]
-            description: 
+            aliases: [starters, starter]
+            description: A match between the first 6 Pokemon.
             
         metronome:
             rarity: 0.0
@@ -242,109 +248,135 @@ metagames:
             # which did not choose sets.
             # Ex: 'match metronome t1'
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 10
+                1:
+                    cancer_check: no
+                5:
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             set_tag: setname+metronome
             display_name: Metronome
-            bid_aliases: [metronome, metro, yolo, yolonome]
-            description: 
+            aliases: [metronome, metro, yolo, yolonome]
+            description: All Pokemon have the move Metronome.
             
         ohko:
             rarity: 0.0
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 10
+                1:
+                    cancer_check: no
+                5:
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             set_tag: setname+ohko
             display_name: OHKO
-            bid_aliases: [ohko]
-            description: 
+            aliases: [ohko]
+            description: All Pokemon have OHKO moves.
             
         seismic_toss:
             rarity: 0.0
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 10
+                1:
+                    cancer_check: no
+                5:
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             set_tag: setname+st
             display_name: Seismic Toss
-            bid_aliases: [seismictoss, st, toss]
+            aliases: [seismictoss, st, toss]
             description: 
             
-        # Renamed the KAPOW meset_tagame to avoid conflict with the KAPOW gimmick.
+        # Renamed the KAPOW metagame to avoid conflict with the KAPOW gimmick.
         pokecidal:
             rarity: 0.0
             match_settings:
-                bet_bonus: 2
-                switching_bet_bonus: 2
+                1:
+                    cancer_check: no
+                5:
+                    bet_bonus: 2
+                    switching_bet_bonus: 2
             set_tag: setname+kapow
             display_name: Pokecidal
-            bid_aliases: [pokecidal, pokecide]
+            aliases: [pokecidal, pokecide]
             description: 
             
         rough_skin:
             rarity: 0.0
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 10
+                1:
+                    cancer_check: no
+                5:
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             set_tag: setname+rough-skin
             display_name: Rough Skin
-            bid_aliases: [roughskin, rs]
+            aliases: [roughskin, rs]
             description: 
             
         input_war:
             rarity: 0.0
             match_settings:
-                bet_bonus: 15
-                switching_bet_bonus: 15
+                1:
+                    cancer_check: no
+                5:
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             set_tag: setname+input-war
             display_name: Input War
-            bid_aliases: [inputwar]
+            aliases: [inputwar]
             description: 
+        
         
     ################
     versus_mixes:
     ################
-        class_warfare:
-            rarity: 5.0
-            # Example of having 10 different versus mixes falling
-            # under the name 'Class Warfare'.
-            mixes:
-                # After "class_warfare" is chosen, sub_rarity determines which particular
-                # mix gets chosen.  In this case there's only one mix, so it always gets chosen.
-                
-                # 4 choose 2 = 6 possible versus combinations in this mix.
-              - metagames: [simple, advanced, runmons, stadium_2]
-                sub_rarity: 1.0
+        # Two sub_modes get chosen randomly- one for each team.
+        vs_mix:
+            rarity: 1.0
+            # 4 choose 2 = 6 possible versus combinations in this mix.
+            sub_modes: [simple, advanced, runmons, stadium2]
             display_name: Class Warfare
-            icon: versus
+            icon_id: class_warfare
             description: # Leave blank for auto generated description.
+            
          
     ################
     random_mixes:
     ################
+        # At least one Pokemon from each sub_mode will be present.
+        # Any token bid with metagames that are not contained 
+        # in a single list will be rejected.
         random_mix:
-            rarity: 5.0
-            mixes:
-                # At least one Pokemon from each metagame will be present.
-              - metagames: [simple, advanced, runmons, stadium_2]
-                sub_rarity: 6.0
+            rarity: 2.5
+            sub_modes: [simple, advanced, runmons, stadium2]
             display_name: Mix
-            icon: mix
+            icon_id: mix
             description: # Leave blank for auto generated description.
-
-    ################
-    token_mix:
-    ################
-        token_mix:
+            
+        random_mix2:
+            # Exists with 0 rarity so match bids can mix starters with the main metagames.
+            rarity: 0.0
+            sub_modes: [simple, advanced, runmons, stadium2, starters]
             display_name: Mix
-            icon: mix
+            icon_id: mix
             description: # Leave blank for auto generated description.
-  
+           
+        random_mix3:
+            rarity: 0.0
+            # At least one Pokemon from each metagame will be present.
+            sub_modes: [starters, metronome, ohko, seismic_toss, pokecidal]
+            match_settings:
+                5:
+                    bet_bonus: 2
+                    switching_bet_bonus: 2
+            display_name: Mix
+            icon_id: mix
+            description: # Leave blank for auto generated description.
+         
     
 ################################
 gimmicks:
 ################################
     ################
-    single:
+    base:
     ################
         # Gimmicks are automatically assigned one or more of the commented categories.
 
@@ -355,7 +387,7 @@ gimmicks:
             # Rarity is calculated automatically based on the 
             # 'default_gimmick_chance' match setting.
             display_name: Normal
-            bid_aliases: [normal]
+            aliases: [normal]
             description: No special rules or mechanics are applied.
                 
         ################
@@ -367,28 +399,32 @@ gimmicks:
             # and then randomly bisecting their rarities.
             rarity: 3.0
             match_settings:
-                switching: permanently_disabled
-                move_delay: 0
-                switch_delay: 0
-                emulation_speed_multiplier: 1.5
-                bet_bonus: 35
-                switching_bet_bonus: 40
-            # A tag for programmers.
+                1:
+                    move_delay: 0
+                    switch_delay: 0
+                    emulation_speed_multiplier: 1.5
+                3:
+                    bet_bonus: 35
+                    switching_bet_bonus: 40
+                7:
+                    switching: permanently_disabled
             input_change:
+                # Tag for programmer use.
                 tag: defiance
-            display_name: defiance
-            bid_aliases: [defiance]
+            display_name: Defiance
+            aliases: [defiance]
             description: Inputs are ineffective. Each move will have a probability of 25% to be chosen.
             
         commitment:
             rarity: 2.0
             match_settings:
-                move_delay: 0
-                switch_delay: 0
+                1:
+                    move_delay: 0
+                    switch_delay: 0
             input_change:
                 tag: commitment
             display_name: Commitment
-            bid_aliases: [commitment]
+            aliases: [commitment]
             description: Inputs can't be changed anymore 20 seconds after betting has ended.
             
         duel:
@@ -396,30 +432,34 @@ gimmicks:
             input_change:
                 tag: duel
             display_name: Duel
-            bid_aliases: [duel]
+            aliases: [duel]
             description: It's a one on one showdown! The inputter with the most influence on their team gets total control of the team.
             
         synchronize:
+            disabled: yes
             rarity: 0.5
             match_settings:
-                bet_bonus: 2
-                switching_bet_bonus: 2
-                bet_ceiling: 50000
+                1:
+                    bet_ceiling: 50000
+                7:    
+                    bet_bonus: 2
+                    switching_bet_bonus: 2
             input_change:
                 tag: synchronize
             display_name: Synchronize
-            bid_aliases: [synchronize, sync]
+            aliases: [synchronize, sync]
             description: Inputs from both teams are combined into one single input replace pool affecting both sides.
             
-        synchronize_2:
+        sync5050:
             rarity: 1.0
             match_settings:
-                bet_bonus: 50
-                switching_bet_bonus: 60
+                3:
+                    bet_bonus: 45
+                    switching_bet_bonus: 50
             input_change:
-                tag: synchronize_2
+                tag: synchronize2
             display_name: Sync 50-50
-            bid_aliases: [sync50-50, sync5050, sync2]
+            aliases: [sync5050, sync2]
             description: Teams have 50% input influence on each other.
         
         ################
@@ -428,136 +468,99 @@ gimmicks:
         random_order:
             rarity: 1.0            
             match_settings:
-                # Switching = 0 allows for U-turn style switching
-                # if this gimmick gets combined with Hit and Run.
-                switching: 0
-                bet_bonus: 40
-                switching_bet_bonus: 45
+                1:
+                    bet_bonus: 45
+                    switching_bet_bonus: 50
+                7:
+                    # Switching = 0.0 allows for U-turn style switching
+                    # if this gimmick gets combined with Hit and Run.
+                    switching: 0.0
             team_change:
                 tag: random_order
             display_name: Random Order
-            bid_aliases: [randomorder]
+            aliases: [randomorder]
             description: The order in which the Pokémon are sent out will be randomized after the match has started.
             
         secrecy:
             rarity: 1.0
             match_settings:
-                bet_bonus: 40
-                switching_bet_bonus: 45
+                1:
+                    bet_bonus: 45
+                    switching_bet_bonus: 50
             team_change:
                 tag: secrecy
             display_name: Secrecy
-            bid_aliases: [secrecy]
+            aliases: [secrecy]
             description: One Pokémon of each team is hidden and gets revealed after the match has started.
             
         traitor:
             rarity: 1.0
             match_settings:
-                bet_bonus: 40
-                switching_bet_bonus: 45
+                1:
+                    bet_bonus: 45
+                    switching_bet_bonus: 50
             team_change:
                 tag: traitor
             display_name: Traitor
-            bid_aliases: [traitor]
-            description: One Pokémon from each team is actually on the other team! The traitors get revealed after the match has started.
+            aliases: [traitor]
+            description: One Pokémon from each team is actually on the other team! The traitors get revealed when the match starts.
             
         ################
         # battle_change category
         ################
         fog:
-            rarity: 0.5
+            rarity: 0.0
             battle_change:
                 tag: fog
             display_name: Chance of Fog
-            bid_aliases: [chanceoffog, fog]
+            aliases: [chanceoffog, fog]
             description: 50% chance for the Colosseum to be shrouded in a deep fog!  Moves are 60% as accurate in fog.
             
         speed:
             rarity: 2.0
             match_settings:
-                move_delay: 0
-                switch_delay: 0
-                emulation_speed_multiplier: 2.0
-                bet_bonus: 35
-                switching_bet_bonus: 40
+                1:
+                    move_delay: 0
+                    switch_delay: 0
+                    emulation_speed_multiplier: 2.0                    
+                    bet_bonus: 35
+                    switching_bet_bonus: 40
             battle_change:
                 tag: speed
             display_name: Speed
-            bid_aliases: [speed]
+            aliases: [speed]
             description: The match is sped up. There are no delays, and animations play faster.
             
         fragile:
             rarity: 1.0
             match_settings:
-                # Switching = 0 allows for U-turn style switching
-                # if this gimmick gets combined with Hit and Run.
-                switching: 0
+                7:
+                    # Switching = 0.0 allows for U-turn style switching
+                    # if this gimmick gets combined with Hit and Run.
+                    switching: 0.0
             battle_change:
                 tag: fragile
             display_name: Fragile
-            bid_aliases: [fragile]
+            aliases: [fragile]
             description: Each move will start with exactly 1 PP.
         
         ################
         # species_replace category
         ################
-        clone:
-            rarity: 1.0
-            match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 15
-            species_replace:
-                one_per_match: yes
-            # Probably need a few more mons in this blacklist.
-                pool_blacklist:
-                  - Smeargle
-                  - Zigzagoon
-                  - Shuckle
-                  - Blissey
-                  - Chansey
-                  - Steelix
-                  - Regirock
-                  - Regice
-                  - Registeel
-                  - Cloyster
-                  - Aggron
-                  - Bastiodon
-                  - Onix
-                  - Probopass
-                  - Forretress
-                  - Skarmory
-                  - Nosepass
-                  - Bronzor
-                  - Bronzong
-                  - Wobbuffet
-                  - Giratina
-            display_name: Clone
-            bid_aliases: [clone]
-            description: All Pokémon become the same random species, but otherwise keep their sets.
-            
         sketchy:
-            rarity: 0.002
+            rarity: 0.01
+            #rarity: 0.002
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 15
+                1:
+                    bet_bonus: 5
+                    switching_bet_bonus: 10
             species_replace:
                 pool:
                   - Smeargle
             display_name: Sketchy
-            bid_aliases: [sketchy]
+            aliases: [sketchy]
             description: All Pokémon are replaced by Smeargles, but otherwise keep their sets.
         
-        raccoon:
-            rarity: 0.002
-            match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 15
-            species_replace:
-                pool:
-                  - Zigzagoon
-            display_name: Raccoon
-            bid_aliases: [raccoon, raccattack]
-            description: 
               
         ################
         # ability_replace category
@@ -565,13 +568,14 @@ gimmicks:
         pinpoint:
             rarity: 1.0
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 15
+                1:
+                    bet_bonus: 5
+                    switching_bet_bonus: 10
             ability_replace:
                 pool:
                   - No Guard
             display_name: Pinpoint
-            bid_aliases: [pinpoint, noguard]
+            aliases: [pinpoint, noguard]
             description: All abilities get replaced with No Guard. (Moves cannot miss.)
             
         chameleon:
@@ -580,7 +584,7 @@ gimmicks:
                 pool:
                   - Color Change
             display_name: Chameleon
-            bid_aliases: [chameleon, colorchange]
+            aliases: [chameleon, colorchange]
             description: All abilities get replaced with Color Change. (Changes the Pokémon's type to the type of the move used on it.)
             
         shield:
@@ -589,7 +593,7 @@ gimmicks:
                 pool:
                   - Shield Dust
             display_name: Shield
-            bid_aliases: [shield, shielddust]
+            aliases: [shield, shielddust]
             description: All abilities get replaced with Shield Dust. (Moves only do damage, with no added effects.)
             
         armor:
@@ -598,8 +602,8 @@ gimmicks:
                 pool:
                   - Battle Armor
                   - Shell Armor
-            display_name: 
-            bid_aliases: [armor, battlearmor, shellarmor]
+            display_name: Armor
+            aliases: [armor, battlearmor, shellarmor]
             description: All abilities get replaced with Battle or Shell Armor. (Critical hits are impossible.)
           
         ################
@@ -608,14 +612,15 @@ gimmicks:
         kapow:
             rarity: 1.0
             match_settings:
-                bet_bonus: 10
-                switching_bet_bonus: 15
+                1:
+                    bet_bonus: 5
+                    switching_bet_bonus: 10
             move_replace:
                 pool:
                   - Self-Destruct
                   - Explosion
             display_name: KAPOW
-            bid_aliases: [kapow]
+            aliases: [kapow]
             description: Each Pokémon has one random move_replaced with Explosion or Self Destruct.
             
         rainbow:
@@ -629,36 +634,38 @@ gimmicks:
                   - Ancient Power
                   - Silver Wind
             display_name: Rainbow
-            bid_aliases: [rainbow, kappapride]
+            aliases: [rainbow, kappapride]
             description: All Pokémon have a random move_replaced with one that has a 10% chance to raise all of the user's stats.
             
         hit_and_run:
             rarity: 0.5
+            match_settings:
+                7:
+                    switching: special
             move_replace:
                 pool:
                   - U-turn
-            switching: special
             display_name: Hit & Run
-            bid_aliases: [hitandrun, hit&run]
+            aliases: [hitandrun, hit&run]
             description: Each Pokémon has one random move_replaced with U-Turn. Switch votes only apply if U-Turn was used.
             
-        Hidden Ace:
+        hidden_ace:
+            rarity: 0.4
             move_replace:
                 pool:
                   - Trump Card
                 pp: 1
-            rarity: 0.4
-            display_name: 
-            bid_aliases: [hiddenace, ace, trumpcard]
+            display_name: Hidden Ace
+            aliases: [hiddenace, ace, trumpcard]
             description: Each Pokémon has one random move_replaced with Trump Card at 1PP. (The move has 200 power.)
             
         letdown:
+            rarity: 0.1
             move_replace:
                 pool:
                   - Splash
-            rarity: 0.1
             display_name: Letdown
-            bid_aliases: [letdown, splash]
+            aliases: [letdown, splash]
             description: Each Pokémon has one random move_replaced with Splash.
             
         ################
@@ -671,7 +678,7 @@ gimmicks:
                   - 'type+fire'
                   - 'type+ice'
             display_name: Fire and Ice
-            bid_aliases: [fireandice]
+            aliases: [fireandice]
             description: Only fire and ice type Pokémon are allowed.
             
         sky_battle:
@@ -681,13 +688,37 @@ gimmicks:
                   - 'type+flying'
                   - 'ability+levitate'
             display_name: Sky Battle
-            bid_aliases: [skybattle]
+            aliases: [skybattle]
             description: Only flying type and levitating Pokémon are allowed.
                 
         # Gimmicks that will be auto-assigned multiple categories.
         ################
         # multi category
         ################
+        clone:
+            rarity: 1.0
+            match_settings:
+                1:
+                    bet_bonus: 5
+                    switching_bet_bonus: 10
+            species_replace:
+                one_per_match: yes
+                pool_blacklist:
+                  - Shedinja
+            item_replace:
+                pool:
+                  - Black Sludge
+                  - Sticky Barb
+                only_for_species:                
+                    [Lugia, Giratina, Mewtwo, Ho-Oh, Metagross, Registeel, Jirachi,
+                    Kyogre, Groudon, Magnezone, Palkia, Dialga, Heatran, Regigigas,
+                    Forretress, Steelix, Aggron, Regirock, Bronzong, Probopass,
+                    Shuckle, Bastiodon, Shieldon, Dusclops, Metang, Umbreon, Skarmory,
+                    Chansey, Blissey]
+            display_name: Clone
+            aliases: [clone]
+            description: All Pokémon become the same random species, but otherwise keep their sets.
+            
         lucky:
             rarity: 0.3
             ability_replace:
@@ -697,7 +728,7 @@ gimmicks:
                 pool: 
                   - Scope Lens
             display_name: Lucky
-            bid_aliases: [lucky, superluck]
+            aliases: [lucky, superluck]
             description: All abilities get replaced with Super Luck, and items with scope lens (Raises critical chance by 2 stages total).
             
         boing:
@@ -709,14 +740,11 @@ gimmicks:
                 pool:
                   - Barrage
             display_name: Boing
-            bid_aliases: [boing, barrage]
+            aliases: [boing, barrage]
             description: All Pokémon get the Skill Link ability and the move Barrage (All multi-hit moves like Barrage hit 5 times).
             
         acid_rain:
-            rarity: 1.0
-            match_settings:
-                bet_bonus: 30
-                switching_bet_bonus: 40
+            rarity: 0.5
             ability_replace:
                 pool:
                   - Drizzle
@@ -727,53 +755,47 @@ gimmicks:
                 pool:
                   - Weather Ball
             display_name: Acid Rain
-            bid_aliases: [acidrain]
+            aliases: [acidrain]
             description: All abilities get replaced with a random weather inducing ability.
             
     ################
     random_combos:
     ################
-        random_combo:
-            # rarity determines how often "Random Combo" is chosen.
+        combo_of_2:
             rarity: 5.0
-            combos:
-                # After "Random Combo" is chosen, sub_rarity determines which particular
-                # combo gets chosen.
-                # Any two gimmicks will be present.
-              - gimmicks: [single, single]
-                sub_rarity: 0.4
-                # Example of boosting a popular gimmick combination.
-              - gimmicks: [defiance, random_order]
-                sub_rarity: 0.2
-                # Any three gimmicks will be present, with rarity 0.1.
-              - gimmicks: [single, single, single]
-                sub_rarity: 0.2
-                # Any four gimmicks will be present, with rarity 0.05.
-              - gimmicks: [single, single, single, single]
-                sub_rarity: 0.1
-                # Any five gimmicks will be present, with rarity 0.03.
-              - gimmicks: [single, single, single, single, single]
-                sub_rarity: 0.05
+            # * is a placeholder for any gimmick.
+            # Any two gimmicks will be present.
+            sub_modes: ["*", "*"]
             display_name: Combo
-            bid_aliases: [combo]
-            icon: combo
+            icon_id: combo
             description: # Leave blank for auto generated description.
-     
-    ################
-    token_combo:
-    ################
-        token_combo:
+            
+        combo_of_3:
+            rarity: 2.0
+            sub_modes: ["*", "*", "*"]
             display_name: Combo
-            bid_aliases:
-            icon: combo
+            icon_id: combo
             description: # Leave blank for auto generated description.
-          
+            
+        combo_of_4:
+            rarity: 0.5
+            sub_modes: ["*", "*", "*", "*"]
+            display_name: Combo
+            icon_id: combo
+            description: # Leave blank for auto generated description.
+            
+        combo_of_5:
+            rarity: 0.2
+            sub_modes: ["*", "*", "*", "*", "*"]
+            display_name: Combo
+            icon_id: combo
+            description: # Leave blank for auto generated description.
+           
       
 ################################
 additional_restrictions:
 ################################
-    # Only 'single' gimmicks and metagames may be blacklisted.
-    # BaseGimmick category shorthand aliases such as 'pokemon_theme' may be used.
+    # Only 'base' gimmicks and metagames may be blacklisted.
     ################
     automated_matchmaking:
     ################
@@ -787,8 +809,9 @@ additional_restrictions:
           - [commitment, hidden_ace]
           - [commitment, letdown]
           - [commitment, rainbow]
-          - [synchronize, fragile]
+          # - [synchronize, fragile]
           - [ubers, fog]
+          - [traitor, vs_mix]
     
     ################
     token_matchmaking:
@@ -805,30 +828,16 @@ additional_restrictions:
           - [commitment, hidden_ace]
           - [commitment, letdown]
           - [commitment, rainbow]
-          - [synchronize, fragile]
+          # - [synchronize, fragile]
           - [ubers, defiance]
         team_choice_gimmick_blacklist:
-            # If a bidder chooses any of these gimmicks, they will be unable to choose teams (other than the exceptions listed below).
+            # Bidders cannot choose team species when requesting these gimmicks.
           - defiance
           - commitment
           - clone
           - sketchy
-          - raccoon
-        metagame_mixes:
-            # Any mix of these Pokemon is fine.
-          - [simple, advanced, runmons, starters]
-          # Any mix of these Pokemon is fine.
-          - [starters, metronome, ohko, seismic_toss, pokecidal]
-          # Any mix with metagames that are not contained 
-          # in a single list will be rejected.
-          #
-          # Ex: Simple and Ubers may not be mixed.
-          # Simple, Ashmons, and Metronome may not be mixed either.
-          # Simple and Ashmons may be mixed. 
          
-fake_mode_icons:
+fake_mode_icon_ids:
     [screwball, biohazard, recycle, snail, spooky, springy, unicorn, 
     fakesocialism, idea, fishy, trash, atomic, gears, puppet, graph,
     jiggy, egg, departed, raccoon]
-          
-          
