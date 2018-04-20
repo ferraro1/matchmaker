@@ -36,10 +36,7 @@ matchmaker_settings:
     default_gimmick_chance: 0.5
     
     holiday_mode: false     # Holiday support to be added.
-    
-    debug:
-        enabled: yes
-        report_winrate: yes
+   
 
 ################################       
 splatoon_settings:
@@ -232,6 +229,11 @@ metagames:
             
         stadium2:
             rarity: 2.5
+            gimmick_rarities:
+                normal: 0.0
+                defiance: 0.0
+                random_order: 0.0
+                s2_defiance_and_random_order: 40.0
             set_tag: setname+stadium-2
             display_name: Stadium 2
             bid_aliases: [stadium2, stad2]
@@ -577,12 +579,12 @@ gimmicks:
         # battle_change category
         ################
         fog:
-            rarity: 5.0
+            rarity: 1.5
             battle_change:
                 tag: fog
             display_name: Chance of Fog
             bid_aliases: [chanceoffog, fog]
-            description: 50% chance for the Colosseum to be shrouded in a deep fog!  Moves are 60% as accurate in fog.
+            description: This battle occurs in the Courtyard Colosseum, which might be shrouded in a deep fog!
             
         speed:
             rarity: 2.0
@@ -592,7 +594,7 @@ gimmicks:
                     switch_delay: 0
                     emulation_speed_multiplier: 2.0                    
                     bet_bonus: 35
-                    switching_bet_bonus: 403
+                    switching_bet_bonus: 40
             battle_change:
                 tag: speed
             display_name: Speed
@@ -828,6 +830,16 @@ gimmicks:
     ################
     random_combos:
     ################
+        s2_defiance_and_random_order:
+            rarity: 0.0
+            biddable: no
+            # * is a placeholder for any gimmick.
+            # Any two gimmicks will be present.
+            sub_modes: [defiance, random_order]
+            display_name: Stadium 2
+            icon_id: stadium2
+            description: Stadium 2 rental sets with Defiance and Random Order.
+            
         combo_of_2:
             rarity: 5.0
             # * is a placeholder for any gimmick.
@@ -889,6 +901,8 @@ additional_restrictions:
           - [sketchy, seismic_toss]
           - [sketchy, pokecidal]
           - [sketchy, input_war]
+          - [ohko, pinpoint]
+          - [fog, acid_rain]
     
     ################
     token_matchmaking:
@@ -896,7 +910,6 @@ additional_restrictions:
         mode_blacklist:
             # Ban a mode from ever being bid in a match.
           - fog
-          - letdown
           - fire_and_ice
           - sky_battle
         mode_pair_blacklists:
@@ -918,12 +931,16 @@ additional_restrictions:
           - [sketchy, seismic_toss]
           - [sketchy, pokecidal]
           - [sketchy, input_war]
+          - [ohko, pinpoint]
+          - [fog, acid_rain]
         team_choice_gimmick_blacklist:
             # Bidders cannot choose team species when requesting these gimmicks.
           - defiance
           - commitment
           - clone
           - sketchy
+          - letdown
+          - boing
          
 fake_mode_icon_ids:
     [screwball, biohazard, recycle, snail, spooky, springy, unicorn, 
