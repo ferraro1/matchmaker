@@ -418,7 +418,7 @@ metagames:
             sub_modes: [metronome, ohko]
             match_settings:
                 1:
-                    match_turn_limit: !!null
+                    match_turn_limit: 0     # Disable turn limits.
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
@@ -433,7 +433,7 @@ metagames:
             sub_modes: [starters, metronome, ohko, seismic_toss, pokecidal]
             match_settings:
                 1:
-                    match_turn_limit: !!null
+                    match_turn_limit: 0     # Disable turn limits.
                 5:
                     bet_bonus: 2
                     switching_bet_bonus: 2
@@ -485,18 +485,6 @@ gimmicks:
             bid_aliases: [defiance]
             description: Inputs are ineffective. Each move will have a probability of 25% to be chosen.
             
-        commitment:
-            rarity: 2.0
-            match_settings:
-                1:
-                    move_delay: 0
-                    switch_delay: 0
-            input_change:
-                tag: commitment
-            display_name: Commitment
-            bid_aliases: [commitment]
-            description: Inputs can't be changed anymore 20 seconds after betting has ended.
-            
         duel:
             rarity: 1.5
             input_change:
@@ -527,7 +515,7 @@ gimmicks:
                     bet_bonus: 45
                     switching_bet_bonus: 50
             input_change:
-                tag: synchronize2
+                tag: sync5050
             display_name: Sync 50-50
             bid_aliases: [sync5050, sync2]
             description: Teams have 50% input influence on each other.
@@ -578,13 +566,25 @@ gimmicks:
         ################
         # battle_change category
         ################
+        commitment:
+            rarity: 2.0
+            match_settings:
+                1:
+                    move_delay: 0
+                    switch_delay: 0
+            battle_change:
+                tag: commitment
+            display_name: Commitment
+            bid_aliases: [commitment]
+            description: Inputs can't be changed anymore 20 seconds after betting has ended.
+            
         fog:
             rarity: 1.5
             battle_change:
                 tag: fog
             display_name: Chance of Fog
             bid_aliases: [chanceoffog, fog]
-            description: This battle occurs in the Courtyard Colosseum, which might be shrouded in a deep fog!
+            description: The battle takes place in the Courtyard Colosseum, which might be shrouded in fog!
             
         speed:
             rarity: 2.0
@@ -836,9 +836,9 @@ gimmicks:
             # * is a placeholder for any gimmick.
             # Any two gimmicks will be present.
             sub_modes: [defiance, random_order]
-            display_name: Stadium 2
-            icon_id: stadium2
-            description: Stadium 2 rental sets with Defiance and Random Order.
+            display_name: Combo
+            icon_id: combo
+            description: # Leave blank for auto generated description.
             
         combo_of_2:
             rarity: 5.0
@@ -874,67 +874,72 @@ gimmicks:
 ################################
 additional_restrictions:
 ################################
-    # Only 'base' gimmicks and metagames may be blacklisted.
+    
+    ################
+    automated_and_token_matchmaking:
+    ################
+        mode_blacklist: []
+            # Ban a mode entirely.
+        
+        mode_pair_blacklists:
+           # Only 'base' gimmicks and metagames may be blacklisted.
+           # Ban two modes from ever appearing together in a match.
+           
+          # Stuck on low PP / useless move.
+          - [commitment, fragile]
+          - [commitment, hidden_ace]
+          - [commitment, letdown]
+          - [commitment, rainbow]
+          # - [synchronize, fragile]
+          
+          # Prolonging
+          - [ubers, defiance]
+          
+          # Boring
+          - [clone, metronome]
+          - [clone, ohko]
+          - [clone, seismic_toss]
+          - [clone, pokecidal]
+          - [clone, input_war]
+          - [sketchy, metronome]
+          - [sketchy, ohko]
+          - [sketchy, seismic_toss]
+          - [sketchy, pokecidal]
+          - [sketchy, input_war]
+          
+          # Nonsensical
+          - [defiance, commitment]
+          - [ohko, pinpoint]
+          - [fog, acid_rain]        
+          - [traitor, vs_mix]
+    
     ################
     automated_matchmaking:
     ################
         mode_blacklist: []
         mode_pair_blacklists:
-            # Ban two modes from ever appearing together in a match.
+            # Prolonging
           - [defiance, fog]
           - [defiance, letdown]
           - [commitment, fog]
-          - [commitment, fragile]
-          - [commitment, hidden_ace]
-          - [commitment, letdown]
-          - [commitment, rainbow]
-          # - [synchronize, fragile]
           - [ubers, fog]
-          - [traitor, vs_mix]
-          - [clone, metronome]
-          - [clone, ohko]
-          - [clone, seismic_toss]
-          - [clone, pokecidal]
-          - [clone, input_war]
-          - [sketchy, metronome]
-          - [sketchy, ohko]
-          - [sketchy, seismic_toss]
-          - [sketchy, pokecidal]
-          - [sketchy, input_war]
-          - [ohko, pinpoint]
-          - [fog, acid_rain]
     
     ################
     token_matchmaking:
     ################
         mode_blacklist:
-            # Ban a mode from ever being bid in a match.
+            # Prolonging
           - fog
+          
+            # Possible bonus issues.
           - fire_and_ice
           - sky_battle
         mode_pair_blacklists:
-            # Ban two modes from ever being bid together in a match.
           - [defiance, letdown]
-          - [commitment, fragile]
-          - [commitment, hidden_ace]
-          - [commitment, letdown]
-          - [commitment, rainbow]
-          # - [synchronize, fragile]
-          - [ubers, defiance]
-          - [clone, metronome]
-          - [clone, ohko]
-          - [clone, seismic_toss]
-          - [clone, pokecidal]
-          - [clone, input_war]
-          - [sketchy, metronome]
-          - [sketchy, ohko]
-          - [sketchy, seismic_toss]
-          - [sketchy, pokecidal]
-          - [sketchy, input_war]
-          - [ohko, pinpoint]
-          - [fog, acid_rain]
         team_choice_gimmick_blacklist:
             # Bidders cannot choose team species when requesting these gimmicks.
+            
+            # Prolonging
           - defiance
           - commitment
           - clone
