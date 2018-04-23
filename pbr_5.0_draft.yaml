@@ -29,8 +29,7 @@ matchmaker_settings:
     # in the attempt to find a balanced match.
     max_attempts: 20
     
-    # 1 / 2048
-    shiny_chance: 0.00048828125
+    shiny_chance: 0.00048828125     # 1 / 2048
     
     # Chance that a gimmick gets picked.
     default_gimmick_chance: 0.5
@@ -85,6 +84,10 @@ match_settings:
             # Needed so metronome vs ohko doesn't get rejected on this basis.
             # Applies to match bids only.
             match_turn_limit: 30
+            
+            # Zero bet bonus if the estimated win percent (for the winner)
+            # is greater than this value.  Percentage between 50 and 100.
+            bet_bonus_max_winchance: 100
     
     ################
     fixed:
@@ -148,9 +151,10 @@ team_choice_settings:
 ################################
     # Settings for token matches where the match bidder
     # selects the Pokemon species for the teams.
+    1:
+        bet_bonus_max_winchance: 80
     7:
-        # switching may still be special for U-turn.
-        switching: 0.0
+        switching: 0.0      # switching may still be special for U-turn.
         bet_bonus: 2
         switching_bet_bonus: 2
     
