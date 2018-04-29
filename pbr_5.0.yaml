@@ -32,14 +32,16 @@ matchmaker_settings:
     shiny_chance: 0.00048828125     # 1 / 2048
     
     # Chance that a gimmick gets picked.
-    default_gimmick_chance: 0.5
+    default_gimmick_chance: 0.45
     
     holiday_mode: false     # Holiday support to be added.
    
 
 ################################       
-splatoon_settings:
+rotation_settings:
 ################################
+    # Rotating selection of available gimmicks.
+    # Inspired by Splatoon map selection.
     enabled: no
     gimmicks_per_rotation: 2
     rotation_duration: 1    # In hours.
@@ -73,9 +75,6 @@ match_settings:
             # Early bet bonus when switching is on.
             switching_bet_bonus: 35
             
-            # Bet ceiling. Modify to some integer value.
-            bet_ceiling: null
-            
             # Ex: all metronome matchups get flagged as "cancer", so this 
             # needs to be disabled for some metagames.
             check_cancer_recommendation: yes
@@ -84,10 +83,6 @@ match_settings:
             # Needed so metronome vs ohko doesn't get rejected on this basis.
             # Applies to match bids only.
             match_turn_limit: 30
-            
-            # Zero bet bonus if the estimated win percent (for the winner)
-            # is greater than this value.  Percentage between 50 and 100.
-            bet_bonus_max_winchance: 100
     
     ################
     fixed:
@@ -151,13 +146,10 @@ team_choice_settings:
 ################################
     # Settings for token matches where the match bidder
     # selects the Pokemon species for the teams.
-    1:
-        bet_bonus_max_winchance: 80
     7:
         switching: 0.0      # switching may still be special for U-turn.
-        bet_bonus: 2
-        switching_bet_bonus: 2
-    
+        bet_bonus: 0
+        switching_bet_bonus: 0
     
     
 ################################
@@ -182,13 +174,15 @@ metagames:
             set_tag: standard
             
             # Name displayed on the overlay.
-            display_name: Simple
+            display_name: Standard
             
             # Alternate names accepted in token match bids.
-            bid_aliases: [simple, standard]
+            bid_aliases: [standard, simple]
+            
+            # Filename of icon, sans extension.
+            icon_id: normal
             
             # Description for the overlay.
-            icon_id: simple
             description: A match using standard movesets.
             
         advanced:
@@ -216,28 +210,28 @@ metagames:
             gimmick_rarity_blacklist:
               - fire_and_ice
               - sky_battle
-            set_tag: middle-cup
+            set_tag: middlecup
             display_name: Middle Cup
             bid_aliases: [middlecup, mc, mcup]
-            description: Description TBD.
+            description: A match using Pokémon in the middle of an evolutionary line.
             
         little_cup:
+            disabled: yes
             rarity: 0.0
             gimmick_rarity_blacklist:
               - fire_and_ice
               - sky_battle
-            set_tag: little-cup
+            set_tag: littlecup
             display_name: Little Cup
             bid_aliases: [littlecup, lc, lcup]
-            description: Description TBD.
+            description: A match using Pokémon at the start of an evolutionary line.
             
         stadium2:
             rarity: 2.5
             gimmick_rarities:
-                normal: 0.0
                 defiance: 0.0
                 random_order: 0.0
-                s2_defiance_and_random_order: 40.0
+                s2_defiance_and_random_order: 50.0
             set_tag: setname+stadium-2
             display_name: Stadium 2
             bid_aliases: [stadium2, stad2]
@@ -254,20 +248,19 @@ metagames:
             set_tag: runmon
             display_name: Runmons
             bid_aliases: [runmons, runmon]
-            icon_id: runmons
-            description: Description TBD.
+            description: A match using Pokémon sets from TPP runs.
             
-        ashmons:
-            disabled: yes
+        animemons:
             rarity: 0.0
             match_settings:
                 2:
                     bet_bonus: 10
                     switching_bet_bonus: 10
-            set_tag: ashmon
-            display_name: Ashmons
-            bid_aliases: [ashmons, ashmon]
-            description: Description TBD.
+            set_tag: anime
+            display_name: Animemons
+            bid_aliases: [animemons, animemon, anime]
+            icon_id: runmons    # Temporarily use runmons icon until an animemons can be made
+            description: A match using Pokémon sets based on the anime.
             
         starters:
             rarity: 0.0
@@ -279,7 +272,7 @@ metagames:
             set_tag: starterbattle
             display_name: Starters
             bid_aliases: [starters, starter]
-            description: Description TBD.
+            description: A match using special sets for the first six Pokémon.
             
         metronome:
             rarity: 0.0
@@ -295,7 +288,7 @@ metagames:
             set_tag: setname+metronome
             display_name: Metronome
             bid_aliases: [metronome, metro, yolo, yolonome]
-            description: Description TBD.
+            description: A match using Pokémon with Metronome movesets.
             
         ohko:
             rarity: 0.0
@@ -308,7 +301,7 @@ metagames:
             set_tag: setname+ohko
             display_name: OHKO
             bid_aliases: [ohko]
-            description: Description TBD.
+            description: A match using Pokémon with OHKO movesets.
             
         seismic_toss:
             rarity: 0.0
@@ -321,21 +314,21 @@ metagames:
             set_tag: setname+st
             display_name: Seismic Toss
             bid_aliases: [seismictoss, st, toss]
-            description: Description TBD.
-            
-        # Renamed the KAPOW metagame to avoid conflict with the KAPOW gimmick.
-        pokecidal:
+            description: A match using Pokémon with Seismic Toss movesets.
+        
+        kapow:
             rarity: 0.0
             match_settings:
                 1:
                     check_cancer_recommendation: no
                 5:
-                    bet_bonus: 2
-                    switching_bet_bonus: 2
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             set_tag: setname+kapow
-            display_name: Pokecidal
-            bid_aliases: [pokecidal, pokecide]
-            description: Description TBD.
+            display_name: KAPOW
+            bid_aliases: [kapow, pokecidal, pokecide]
+            icon_id: bomb
+            description: A match using Pokémon with sacrifical movesets.
             
         rough_skin:
             rarity: 0.0
@@ -348,7 +341,7 @@ metagames:
             set_tag: setname+rough-skin
             display_name: Rough Skin
             bid_aliases: [roughskin, rs]
-            description: Description TBD.
+            description: A match using Pokémon with sets built around Rough Skin.
             
         input_war:
             rarity: 0.0
@@ -361,7 +354,7 @@ metagames:
             set_tag: setname+input-war
             display_name: Input War
             bid_aliases: [inputwar]
-            description: Description TBD.
+            description: A match using Pokémon with sets that incite input wars.
         
         
     ################
@@ -397,6 +390,10 @@ metagames:
         random_mix_bid:
             # Used by token match bids of multiple metagames.
             rarity: 0.0
+            match_settings:
+                2:
+                    bet_bonus: 10
+                    switching_bet_bonus: 10
             sub_modes: [simple, advanced]
             display_name: Mix
             icon_id: mix
@@ -417,12 +414,11 @@ metagames:
             
         luckmons:
             # This combo is present so players can bid with the 'luckmons' alias.
-            # This combo should be ok for 5%.
             rarity: 0.0
             sub_modes: [metronome, ohko]
             match_settings:
                 1:
-                    match_turn_limit: 0     # Disable turn limits.
+                    match_turn_limit: 0     # Disable match analysis turn limit rejection.
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
@@ -432,15 +428,14 @@ metagames:
             description: # Leave blank for auto generated description.
             
         random_mix_bid3:
-            # Decreased bet bonus because of the unbalanced metagames present.
             rarity: 0.0
-            sub_modes: [starters, metronome, ohko, seismic_toss, pokecidal]
+            sub_modes: [starters, metronome, ohko, seismic_toss, kapow]
             match_settings:
                 1:
-                    match_turn_limit: 0     # Disable turn limits.
+                    match_turn_limit: 0     # Disable match analysis turn limit rejection.
                 5:
-                    bet_bonus: 2
-                    switching_bet_bonus: 2
+                    bet_bonus: 5
+                    switching_bet_bonus: 5
             display_name: Mix
             icon_id: mix
             description: # Leave blank for auto generated description.
@@ -501,11 +496,9 @@ gimmicks:
             disabled: yes
             rarity: 0.5
             match_settings:
-                1:
-                    bet_ceiling: 50000
                 7:    
-                    bet_bonus: 2
-                    switching_bet_bonus: 2
+                    bet_bonus: 0
+                    switching_bet_bonus: 0
             input_change:
                 tag: synchronize
             display_name: Synchronize
@@ -682,7 +675,7 @@ gimmicks:
         ################
         # move_replace category
         ################
-        kapow:
+        explosive:
             rarity: 1.0
             match_settings:
                 1:
@@ -692,9 +685,10 @@ gimmicks:
                 pool:
                   - Self-Destruct
                   - Explosion
-            display_name: KAPOW
-            bid_aliases: [kapow]
-            description: Each Pokémon has one random move_replaced with Explosion or Self Destruct.
+            display_name: Explosive
+            bid_aliases: [explosive, explode, explosion, selfdestruct]
+            icon_id: kapow
+            description: Each Pokémon has one random move replaced with Explosion or Self Destruct.
             
         rainbow:
             # An old idea was to replace abilities with serene grace.
@@ -708,7 +702,7 @@ gimmicks:
                   - Silver Wind
             display_name: Rainbow
             bid_aliases: [rainbow, kappapride]
-            description: All Pokémon have a random move_replaced with one that has a 10% chance to raise all of the user's stats.
+            description: All Pokémon have a random move replaced with one that has a 10% chance to raise all of the user's stats.
             
         hit_and_run:
             rarity: 0.5
@@ -719,8 +713,8 @@ gimmicks:
                 pool:
                   - U-turn
             display_name: Hit & Run
-            bid_aliases: [hitandrun, hit&run]
-            description: Each Pokémon has one random move_replaced with U-Turn. Switch votes only apply if U-Turn was used.
+            bid_aliases: [hitandrun, hit&run, uturn]
+            description: Each Pokémon has one random move replaced with U-Turn. Switch votes only apply if U-Turn was used.
             
         hidden_ace:
             rarity: 0.4
@@ -730,7 +724,7 @@ gimmicks:
                 pp: 1
             display_name: Hidden Ace
             bid_aliases: [hiddenace, ace, trumpcard]
-            description: Each Pokémon has one random move_replaced with Trump Card at 1PP. (The move has 200 power.)
+            description: Each Pokémon has one random move replaced with Trump Card at 1PP. (The move has 200 power.)
             
         letdown:
             rarity: 0.1
@@ -739,7 +733,7 @@ gimmicks:
                   - Splash
             display_name: Letdown
             bid_aliases: [letdown, splash]
-            description: Each Pokémon has one random move_replaced with Splash.
+            description: Each Pokémon has one random move replaced with Splash.
             
         ################
         # pokemon_theme category
@@ -829,7 +823,7 @@ gimmicks:
                   - Weather Ball
             display_name: Acid Rain
             bid_aliases: [acidrain]
-            description: All abilities get replaced with a random weather inducing ability.
+            description: All Pokémon get the move Weather Ball and a random weather inducing ability.
             
     ################
     random_combos:
@@ -845,7 +839,7 @@ gimmicks:
             description: # Leave blank for auto generated description.
             
         combo_of_2:
-            rarity: 5.0
+            rarity: 3.0
             # * is a placeholder for any gimmick.
             # Any two gimmicks will be present.
             sub_modes: ["*", "*"]
@@ -854,7 +848,7 @@ gimmicks:
             description: # Leave blank for auto generated description.
             
         combo_of_3:
-            rarity: 2.0
+            rarity: 1.5
             sub_modes: ["*", "*", "*"]
             display_name: Combo
             icon_id: combo
@@ -888,63 +882,56 @@ additional_restrictions:
         mode_pair_blacklists:
            # Only 'base' gimmicks and metagames may be blacklisted.
            # Ban two modes from ever appearing together in a match.
-           
-          # Stuck on low PP / useless move.
-          - [commitment, fragile]
+         
+          - [commitment, fragile]        # Stuck on low PP / useless move.
           - [commitment, hidden_ace]
           - [commitment, letdown]
           - [commitment, rainbow]
           # - [synchronize, fragile]
           
-          # Prolonging
-          - [ubers, defiance]
+          - [ubers, defiance]           # Prolonging
           
-          # Boring
-          - [clone, metronome]
+          - [clone, metronome]          # Boring
           - [clone, ohko]
           - [clone, seismic_toss]
-          - [clone, pokecidal]
+          - [clone, kapow]
           - [clone, input_war]
           - [sketchy, metronome]
           - [sketchy, ohko]
           - [sketchy, seismic_toss]
-          - [sketchy, pokecidal]
+          - [sketchy, kapow]
           - [sketchy, input_war]
           
-          # Nonsensical
-          - [defiance, commitment]
+          - [defiance, commitment]      # Nonsensical    
           - [ohko, pinpoint]
-          - [fog, acid_rain]        
-          - [traitor, vs_mix]
+          - [fog, acid_rain]  
+
+          - [metronome, lucky]          # Metronome sets should not lose held items
     
     ################
     automated_matchmaking:
     ################
         mode_blacklist: []
         mode_pair_blacklists:
-            # Prolonging
-          - [defiance, fog]
+          - [defiance, fog]             # Prolonging
           - [defiance, letdown]
           - [commitment, fog]
-          - [ubers, fog]
+          - [ubers, fog]   
+          - [traitor, vs_mix]
     
     ################
     token_matchmaking:
     ################
         mode_blacklist:
-            # Prolonging
-          - fog
+          - fog                     # Prolonging
           
-            # Possible bonus issues.
-          - fire_and_ice
+          - fire_and_ice            # Possible bonus issues
           - sky_battle
         mode_pair_blacklists:
-          - [defiance, letdown]
+          - [defiance, letdown]     # Prolonging
         team_choice_gimmick_blacklist:
             # Bidders cannot choose team species when requesting these gimmicks.
-            
-            # Prolonging
-          - defiance
+          - defiance                # Prolonging
           - commitment
           - clone
           - sketchy
