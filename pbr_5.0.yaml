@@ -147,7 +147,6 @@ team_choice_settings:
     # Settings for token matches where the match bidder
     # selects the Pokemon species for the teams.
     7:
-        switching: 0.0      # switching may still be special for U-turn.
         bet_bonus: 0
         switching_bet_bonus: 0
     
@@ -168,7 +167,7 @@ metagames:
                     # Priority bracket 1 settings.
                     
                     # Make switching=on a 35% chance.
-                    switching: 0.35
+                    switching: 0.40
             
             # Internal set tag, set by movesets team.
             set_tag: standard
@@ -189,7 +188,7 @@ metagames:
             rarity: 12.5
             match_settings:
                 1:
-                    switching: 0.65
+                    switching: 0.45
             set_tag: advanced
             display_name: Advanced
             bid_aliases: [advanced, advance]
@@ -199,7 +198,7 @@ metagames:
             rarity: 2.5
             match_settings:
                 1:
-                    switching: 0.65
+                    switching: 0.45
             set_tag: ubers
             display_name: Ubers
             bid_aliases: [ubers, uber]
@@ -228,10 +227,14 @@ metagames:
             
         stadium2:
             rarity: 2.5
+            match_settings:
+                2:
+                    bet_bonus: 10
+                    switching_bet_bonus: 10
+            gimmick_rarity_whitelist:
+              - s2_defiance_and_random_order
             gimmick_rarities:
-                defiance: 0.0
-                random_order: 0.0
-                s2_defiance_and_random_order: 50.0
+                s2_defiance_and_random_order: 5.0
             set_tag: setname+stadium-2
             display_name: Stadium 2
             bid_aliases: [stadium2, stad2]
@@ -239,6 +242,9 @@ metagames:
             
         runmons:
             rarity: 1.0
+            gimmick_rarity_blacklist:
+              - fire_and_ice
+              - sky_battle
             match_settings:
                 2:
                     bet_bonus: 10
@@ -251,7 +257,10 @@ metagames:
             description: A match using Pokémon sets from TPP runs.
             
         animemons:
-            rarity: 0.0
+            rarity: 1.0
+            gimmick_rarity_blacklist:
+              - fire_and_ice
+              - sky_battle
             match_settings:
                 2:
                     bet_bonus: 10
@@ -282,6 +291,7 @@ metagames:
             match_settings:
                 1:
                     check_cancer_recommendation: no
+                    match_turn_limit: 0
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
@@ -295,9 +305,12 @@ metagames:
             match_settings:
                 1:
                     check_cancer_recommendation: no
+                    match_turn_limit: 0
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
+                7:
+                    switching: 0.0
             set_tag: setname+ohko
             display_name: OHKO
             bid_aliases: [ohko]
@@ -308,9 +321,12 @@ metagames:
             match_settings:
                 1:
                     check_cancer_recommendation: no
+                    match_turn_limit: 0
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
+                7:
+                    switching: 0.0
             set_tag: setname+st
             display_name: Seismic Toss
             bid_aliases: [seismictoss, st, toss]
@@ -321,9 +337,12 @@ metagames:
             match_settings:
                 1:
                     check_cancer_recommendation: no
+                    match_turn_limit: 0
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
+                7:
+                    switching: 0.0
             set_tag: setname+kapow
             display_name: KAPOW
             bid_aliases: [kapow, pokecidal, pokecide]
@@ -335,9 +354,12 @@ metagames:
             match_settings:
                 1:
                     check_cancer_recommendation: no
+                    match_turn_limit: 0
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
+                7:
+                    switching: 0.0
             set_tag: setname+rough-skin
             display_name: Rough Skin
             bid_aliases: [roughskin, rs]
@@ -348,6 +370,7 @@ metagames:
             match_settings:
                 1:
                     check_cancer_recommendation: no
+                    match_turn_limit: 0
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
@@ -418,7 +441,8 @@ metagames:
             sub_modes: [metronome, ohko]
             match_settings:
                 1:
-                    match_turn_limit: 0     # Disable match analysis turn limit rejection.
+                    check_cancer_recommendation: no     # These metagames usually get flagged as cancer.
+                    match_turn_limit: 0                 # Disable match analysis turn limit rejection.
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
@@ -432,7 +456,8 @@ metagames:
             sub_modes: [starters, metronome, ohko, seismic_toss, kapow]
             match_settings:
                 1:
-                    match_turn_limit: 0     # Disable match analysis turn limit rejection.
+                    check_cancer_recommendation: no     # These metagames usually get flagged as cancer.
+                    match_turn_limit: 0                 # Disable match analysis turn limit rejection.
                 5:
                     bet_bonus: 5
                     switching_bet_bonus: 5
